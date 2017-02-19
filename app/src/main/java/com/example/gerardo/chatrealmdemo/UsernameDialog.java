@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -92,7 +93,11 @@ public class UsernameDialog extends Dialog {
                 Usuario user = new Usuario();
                 user.setIdUsuario();
                 user.setNombreUsuario(editUsername.getText().toString());
-                prefs.edit().putInt("id_username",user.getIdUsuario()).apply();
+
+                realm.copyToRealm(user);
+
+                Log.d("IDE",Application.usuarioId.get()+"");
+                prefs.edit().putInt("id_username",Application.usuarioId.get()).apply();
             }
         });
         prefs.edit().putString("username",editUsername.getText().toString()).apply();

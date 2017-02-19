@@ -3,6 +3,7 @@ package com.example.gerardo.chatrealmdemo.adapter;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
     public ChatAdapter(Context context, int idUser) {
         this.context = context;
-        idUser = idUser;
+        this.idUser = idUser;
     }
 
     @Override
@@ -43,13 +44,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     @Override
     public void onBindViewHolder(ChatViewHolder holder, int position) {
         Mensaje mensaje = mensajes.get(position);
-
+        holder.setGravity(1);
+        Log.d("IDES","IDMSG "+mensaje.getIdUsuario()+"IDEXT "+idUser);
         if (mensaje.getIdUsuario() == idUser){
             holder.setGravity(1);
         }else{
             holder.setGravity(2);
         }
-
         holder.setMessage(mensaje.getContenidoMensaje());
     }
 
