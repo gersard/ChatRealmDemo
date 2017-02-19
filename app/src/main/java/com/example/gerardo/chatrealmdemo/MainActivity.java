@@ -2,6 +2,7 @@ package com.example.gerardo.chatrealmdemo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -48,6 +49,16 @@ public class MainActivity extends AppCompatActivity {
         Funciones.crearCanales(realm);
         setRecyclerView(this);
 
+        validarUsernameExist();
+
+    }
+
+    private void validarUsernameExist() {
+        SharedPreferences prefs = getSharedPreferences("prefs_chat_realm",MODE_PRIVATE);
+        if (prefs.getString("username","").equals("")){
+            UsernameDialog dialog = new UsernameDialog(this);
+            dialog.show();
+        }
     }
 
     private void setRecyclerView(Context context){
@@ -85,7 +96,9 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_editusername) {
+            UsernameDialog dialog = new UsernameDialog(this);
+            dialog.show();
             return true;
         }
 
