@@ -2,9 +2,14 @@ package com.example.gerardo.chatrealmdemo.model;
 
 import com.example.gerardo.chatrealmdemo.Application;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.RealmResults;
 import io.realm.annotations.PrimaryKey;
 
 /**
@@ -16,6 +21,7 @@ public class Mensaje extends RealmObject {
     private int id;
     private String contenidoMensaje;
     private Date fechaEnviado;
+    private int idUsuario;
 
     public Mensaje() {
     }
@@ -42,5 +48,13 @@ public class Mensaje extends RealmObject {
 
     public void setFechaEnviado(Date fechaEnviado) {
         this.fechaEnviado = fechaEnviado;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 }

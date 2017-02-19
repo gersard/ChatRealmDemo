@@ -6,6 +6,7 @@ import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import io.realm.annotations.PrimaryKey;
 
 /**
@@ -17,6 +18,7 @@ public class Canal extends RealmObject {
     @PrimaryKey
     private int id;
     private RealmList<Usuario> usuarios;
+    private RealmList<Mensaje> mensajes;
     private String nombreCanal;
 
     public Canal() {
@@ -46,11 +48,26 @@ public class Canal extends RealmObject {
         this.nombreCanal = nombreCanal;
     }
 
+    public RealmList<Mensaje> getMensajes() {
+        return mensajes;
+    }
+
+    public void setMensajes(RealmList<Mensaje> mensajes) {
+        this.mensajes = mensajes;
+    }
+
     //METODOS
 
     public static RealmResults<Canal> getCanales(Realm realm){
         return realm.where(Canal.class).findAll();
     }
 
+    public static RealmList<Mensaje> getMensajesByCanal(Realm realm, int idCanal){
+        Canal mensajes = realm.where(Canal.class).equalTo("id",idCanal)
+//                .findAllSorted("fechaEnviado", Sort.ASCENDING)
+                .findFirst();
+
+        return mensajes.getMensajes();
+    }
 
 }
