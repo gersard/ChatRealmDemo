@@ -1,11 +1,14 @@
 package com.example.gerardo.chatrealmdemo;
 
 import android.content.SharedPreferences;
+import android.os.Build;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -17,6 +20,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -58,8 +63,13 @@ public class ChatActivity extends AppCompatActivity {
 
         adapter = new ChatAdapter(this,idUser);
         recyclerViewChat.setAdapter(adapter);
+        RealmList<Mensaje> messages = Canal.getMensajesByCanal(realm,idCanal);
+        if (messages != null && messages.size() != 0){
+            adapter.addAllMessages(messages);
+            recyclerViewChat.scrollToPosition(adapter.getItemCount()-1);
+            scrollRecyclerViewWhenKeyboardAppears(recyclerViewChat);
+        }
 
-        adapter.addAllMessages(Canal.getMensajesByCanal(realm,idCanal));
     }
 
     @OnClick(R.id.btn_send)
@@ -72,6 +82,7 @@ public class ChatActivity extends AppCompatActivity {
                     mensaje.setIdMensaje();
                     mensaje.setContenidoMensaje(editMessage.getText().toString());
                     mensaje.setIdUsuario(prefs.getInt("id_username",0));
+                    mensaje.setFechaEnviado(Funciones.getCurrentHour());
 
                     realm.copyToRealm(mensaje);
 
@@ -87,5 +98,25 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
+    private void scrollRecyclerViewWhenKeyboardAppears(final RecyclerView recyclerView){
+        if (Build.VERSION.SDK_INT >= 11) {
+            recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v,
+                                           int left, int top, int right, int bottom,
+                                           int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    if (bottom < oldBottom) {
+                        recyclerView.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                recyclerView.smoothScrollToPosition(
+                                        recyclerView.getAdapter().getItemCount() - 1);
+                            }
+                        }, 100);
+                    }
+                }
+            });
+        }
+    }
 
 }

@@ -7,7 +7,9 @@ import android.util.Log;
 
 import com.example.gerardo.chatrealmdemo.model.Canal;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -48,5 +50,15 @@ public class Funciones {
         return px;
     }
 
+    public static String getCurrentHour(){
+        Calendar rightNow = Calendar.getInstance();
+//        int currentHour = rightNow.get(Calendar.HOUR_OF_DAY);
+//        int currentMinute = rightNow.get(Calendar.MINUTE);
+//         String hora = currentHour+":"+currentMinute;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        String date = sdf.format(rightNow.getTime());
+        return date;
+    }
 
 }

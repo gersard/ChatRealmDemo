@@ -4,6 +4,11 @@
     <color name="colorPrimaryDark">#282631</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="chat_message_background_incoming">#f3ffffff</color>
+    <color name="chat_message_background_outcoming">#fdcec8f1</color>
+    <color name="text_chat_message">#ec3d3d3d</color>
+    <color name="text_chat_message_date">#e3d2d2d2</color>
+
 
     <color name="whiteTransparecy">#bddfdfdf</color>
 </resources>

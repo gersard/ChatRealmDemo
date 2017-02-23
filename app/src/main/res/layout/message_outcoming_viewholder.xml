@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="4dp"
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/cardview_chat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/outgoing_message"
+        android:orientation="vertical"
+        android:layout_gravity="end"
+        android:paddingRight="14dp"
+        android:paddingEnd="14dp"
+        android:paddingStart="6dp"
+        android:paddingLeft="6dp"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp">
+
+        <TextView
+            android:id="@+id/vw_chat_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="250dp"
+            android:textColor="@color/text_chat_message"
+            android:layout_margin="2dp"
+            android:text="Prueba a ver como se vedsads fefsefesefsfesfsefefsefsefs"
+            android:textSize="18dp" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/vw_chat_fecha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_gravity="end"
+        android:text="20:55"
+        android:textColor="@color/text_chat_message_date"
+        android:textSize="12dp" />
+
+
+</LinearLayout>

@@ -20,7 +20,7 @@ public class Mensaje extends RealmObject {
     @PrimaryKey
     private int id;
     private String contenidoMensaje;
-    private Date fechaEnviado;
+    private String fechaEnviado;
     private int idUsuario;
 
     public Mensaje() {
@@ -42,11 +42,11 @@ public class Mensaje extends RealmObject {
         this.contenidoMensaje = contenidoMensaje;
     }
 
-    public Date getFechaEnviado() {
+    public String getFechaEnviado() {
         return fechaEnviado;
     }
 
-    public void setFechaEnviado(Date fechaEnviado) {
+    public void setFechaEnviado(String fechaEnviado) {
         this.fechaEnviado = fechaEnviado;
     }
 
