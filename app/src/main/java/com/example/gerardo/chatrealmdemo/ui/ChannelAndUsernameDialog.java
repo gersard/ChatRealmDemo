@@ -46,7 +46,6 @@ public class ChannelAndUsernameDialog extends Dialog {
 
     public ChannelAndUsernameDialog(Context context, int dialogType, MainActivity activity) {
         super(context);
-
         this.dialogType = dialogType;
         this.activity = activity;
         mIupdateRecyclers = null;
@@ -55,14 +54,6 @@ public class ChannelAndUsernameDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-//        lp.copyFrom(getWindow().getAttributes());
-//        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-//        lp.height = (int) convertDpToPixel(200,getContext());
-//        getWindow().setAttributes(lp);
-
-//        ColorDrawable colorDrawable = new ColorDrawable(ContextCompat.getColor(getContext(),R.color.whiteTransparecy));
-//        getWindow().setBackgroundDrawable(colorDrawable);
         configureDialog();
     }
 
