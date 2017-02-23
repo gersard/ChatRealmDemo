@@ -1,19 +1,22 @@
-package com.example.gerardo.chatrealmdemo;
+package com.example.gerardo.chatrealmdemo.ui;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.gerardo.chatrealmdemo.Constants;
+import com.example.gerardo.chatrealmdemo.Funciones;
+import com.example.gerardo.chatrealmdemo.R;
 import com.example.gerardo.chatrealmdemo.adapter.ListaCanalAdapter;
 import com.example.gerardo.chatrealmdemo.model.Canal;
 
@@ -21,11 +24,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ChannelAndUsernameDialog.IupdateRecyclers {
+
+    private final String TAG = getClass().getSimpleName();
 
     private Realm realm;
     @BindView(R.id.rv_channels)
     RecyclerView recyclerViewChannel;
+    ListaCanalAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +45,9 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                ChannelAndUsernameDialog dialog = new ChannelAndUsernameDialog(MainActivity.this
+                        , Constants.DIALOG_CHANNEL,MainActivity.this);
+                dialog.show();
             }
         });
 
@@ -56,13 +63,14 @@ public class MainActivity extends AppCompatActivity {
     private void validarUsernameExist() {
         SharedPreferences prefs = getSharedPreferences("prefs_chat_realm",MODE_PRIVATE);
         if (prefs.getString("username","").equals("")){
-            UsernameDialog dialog = new UsernameDialog(this);
+            ChannelAndUsernameDialog dialog = new ChannelAndUsernameDialog(this, Constants.DIALOG_USERNAME,
+                    MainActivity.this);
             dialog.show();
         }
     }
 
     private void setRecyclerView(Context context){
-        final ListaCanalAdapter adapter = new ListaCanalAdapter(context);
+        adapter = new ListaCanalAdapter(context);
         LinearLayoutManager lm = new LinearLayoutManager(context);
         //PROPIEDAD PARA EL CHAT
 //        lm.setReverseLayout(true);
@@ -97,9 +105,12 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_editusername) {
-            UsernameDialog dialog = new UsernameDialog(this);
+            ChannelAndUsernameDialog dialog = new ChannelAndUsernameDialog(this, Constants.DIALOG_USERNAME,
+                    MainActivity.this);
             dialog.show();
             return true;
+        }else if (id == R.id.action_user_online){
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -110,6 +121,14 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         if (!realm.isClosed()){
             realm.close();
+        }
+    }
+
+    @Override
+    public void updateRecyclerChannel() {
+        if (adapter != null){
+            adapter.notifyItemInserted(adapter.getItemCount());
+            recyclerViewChannel.scrollToPosition(adapter.getItemCount());
         }
     }
 }

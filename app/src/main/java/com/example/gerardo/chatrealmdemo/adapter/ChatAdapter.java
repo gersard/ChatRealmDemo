@@ -113,8 +113,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     }
 
     public void addAllMessages(RealmList<Mensaje> mensajes){
+        this.mensajes = mensajes;
         if (mensajes.size()!=0){
-            this.mensajes = mensajes;
             notifyDataSetChanged();
         }
     }

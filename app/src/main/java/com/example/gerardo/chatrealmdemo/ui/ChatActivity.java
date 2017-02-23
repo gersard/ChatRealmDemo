@@ -1,4 +1,4 @@
-package com.example.gerardo.chatrealmdemo;
+package com.example.gerardo.chatrealmdemo.ui;
 
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -9,9 +9,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.example.gerardo.chatrealmdemo.Funciones;
+import com.example.gerardo.chatrealmdemo.R;
 import com.example.gerardo.chatrealmdemo.adapter.ChatAdapter;
 import com.example.gerardo.chatrealmdemo.model.Canal;
 import com.example.gerardo.chatrealmdemo.model.Mensaje;
@@ -64,8 +68,8 @@ public class ChatActivity extends AppCompatActivity {
         adapter = new ChatAdapter(this,idUser);
         recyclerViewChat.setAdapter(adapter);
         RealmList<Mensaje> messages = Canal.getMensajesByCanal(realm,idCanal);
+        adapter.addAllMessages(messages);
         if (messages != null && messages.size() != 0){
-            adapter.addAllMessages(messages);
             recyclerViewChat.scrollToPosition(adapter.getItemCount()-1);
             scrollRecyclerViewWhenKeyboardAppears(recyclerViewChat);
         }
@@ -90,7 +94,9 @@ public class ChatActivity extends AppCompatActivity {
                     canal.getMensajes().add(mensaje);
 
                     editMessage.setText("");
-                    adapter.notifyDataSetChanged();
+//                    adapter.notifyDataSetChanged();
+                    adapter.notifyItemInserted(adapter.getItemCount());
+                    Log.d("CONTADOR",adapter.getItemCount()+"");
                     recyclerViewChat.scrollToPosition(adapter.getItemCount()-1);
                 }
             });
@@ -99,6 +105,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void scrollRecyclerViewWhenKeyboardAppears(final RecyclerView recyclerView){
+
         if (Build.VERSION.SDK_INT >= 11) {
             recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
                 @Override

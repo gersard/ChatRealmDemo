@@ -7,7 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimary"
     android:fitsSystemWindows="true"
-    tools:context="com.example.gerardo.chatrealmdemo.ChatActivity">
+    tools:context="com.example.gerardo.chatrealmdemo.ui.ChatActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

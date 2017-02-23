@@ -3,4 +3,5 @@
     <string name="action_settings">Settings</string>
     <string name="action_edit_username">Editar username</string>
     <string name="hint_edit_username_dialog">Nombre de usuario</string>
+    <string name="text_see_users_online">Usuarios online</string>
 </resources>

@@ -43,6 +43,13 @@ public class Funciones {
         }
     }
 
+    public static void crearCanal(Realm realm, String nombreCanal){
+        Canal canal = new Canal();
+        canal.setIdCanal();
+        canal.setNombreCanal(nombreCanal);
+        realm.copyToRealm(canal);
+    }
+
     public static float convertDpToPixel(float dp, Context context){
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();

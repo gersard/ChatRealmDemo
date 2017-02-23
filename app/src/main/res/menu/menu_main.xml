@@ -1,10 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.gerardo.chatrealmdemo.MainActivity">
+    tools:context="com.example.gerardo.chatrealmdemo.ui.MainActivity">
     <item
         android:id="@+id/action_editusername"
         android:orderInCategory="100"
         android:title="@string/action_edit_username"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_user_online"
+        android:orderInCategory="100"
+        android:title="@string/text_see_users_online"
         app:showAsAction="never" />
 </menu>
