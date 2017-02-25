@@ -14,11 +14,13 @@ import android.view.animation.AnimationSet;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.example.gerardo.chatrealmdemo.Constants;
 import com.example.gerardo.chatrealmdemo.Funciones;
 import com.example.gerardo.chatrealmdemo.R;
 import com.example.gerardo.chatrealmdemo.adapter.ChatAdapter;
 import com.example.gerardo.chatrealmdemo.model.Canal;
 import com.example.gerardo.chatrealmdemo.model.Mensaje;
+import com.example.gerardo.chatrealmdemo.ui.custom.RecyclerViewWithEmptyViewSupport;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,7 +32,7 @@ import io.realm.RealmResults;
 public class ChatActivity extends AppCompatActivity {
 
     @BindView(R.id.chat_recyclerview)
-    RecyclerView recyclerViewChat;
+    RecyclerViewWithEmptyViewSupport recyclerViewChat;
     @BindView(R.id.edit_message)
     EditText editMessage;
     @BindView(R.id.btn_send)
@@ -53,7 +55,7 @@ public class ChatActivity extends AppCompatActivity {
         if (b.getInt("id_canal") != 0){
             idCanal = b.getInt("id_canal");
         }
-        prefs = getSharedPreferences("prefs_chat_realm", MODE_PRIVATE);
+        prefs = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
         getSupportActionBar().setTitle("Canal "+idCanal);
         setupRecyclerView(prefs.getInt("id_username",0),idCanal);
 
@@ -64,11 +66,12 @@ public class ChatActivity extends AppCompatActivity {
         LinearLayoutManager lm = new LinearLayoutManager(this);
         lm.setReverseLayout(false);
         recyclerViewChat.setLayoutManager(lm);
+        recyclerViewChat.setEmptyView(findViewById(R.id.txt_empty_view_chat));
 
-        adapter = new ChatAdapter(this,idUser);
-        recyclerViewChat.setAdapter(adapter);
+
         RealmList<Mensaje> messages = Canal.getMensajesByCanal(realm,idCanal);
-        adapter.addAllMessages(messages);
+        adapter = new ChatAdapter(this,idUser,messages);
+        recyclerViewChat.setAdapter(adapter);
         if (messages != null && messages.size() != 0){
             recyclerViewChat.scrollToPosition(adapter.getItemCount()-1);
             scrollRecyclerViewWhenKeyboardAppears(recyclerViewChat);
@@ -95,13 +98,24 @@ public class ChatActivity extends AppCompatActivity {
 
                     editMessage.setText("");
 //                    adapter.notifyDataSetChanged();
+
+                    if (adapter.getItemCount() == 1){
+                        updateAdapter();
+                    }
+
                     adapter.notifyItemInserted(adapter.getItemCount());
-                    Log.d("CONTADOR",adapter.getItemCount()+"");
+
                     recyclerViewChat.scrollToPosition(adapter.getItemCount()-1);
                 }
             });
         }
 
+    }
+
+    private void updateAdapter(){
+        RealmList<Mensaje> messages = Canal.getMensajesByCanal(realm,idCanal);
+        adapter = new ChatAdapter(this,prefs.getInt("id_username",0),messages);
+        recyclerViewChat.setAdapter(adapter);
     }
 
     private void scrollRecyclerViewWhenKeyboardAppears(final RecyclerView recyclerView){

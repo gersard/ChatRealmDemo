@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.gerardo.chatrealmdemo.Constants;
 import com.example.gerardo.chatrealmdemo.R;
+import com.example.gerardo.chatrealmdemo.model.Canal;
 import com.example.gerardo.chatrealmdemo.model.Mensaje;
 
 import butterknife.BindView;
@@ -27,12 +28,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     private int idUser;
     private String lastDate;
     private boolean lastMessageWasMe;
+    RecyclerView mRecyclerview;
 
-    public ChatAdapter(Context context, int idUser) {
+    public ChatAdapter(Context context, int idUser, RealmList<Mensaje> mensajeRealmList) {
         this.context = context;
         this.idUser = idUser;
         lastDate = "";
         lastMessageWasMe = false;
+        mensajes = mensajeRealmList;
     }
 
     @Override
@@ -58,7 +61,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                 itemView = LayoutInflater.from(context).inflate(R.layout.message_incoming_viewholder,parent,false);
                 break;
         }
-
+        mRecyclerview = (RecyclerView) parent;
         return new ChatAdapter.ChatViewHolder(itemView);
     }
 
@@ -112,14 +115,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
     }
 
-    public void addAllMessages(RealmList<Mensaje> mensajes){
+/*    public void addAllMessages(RealmList<Mensaje> mensajes){
         this.mensajes = mensajes;
         if (mensajes.size()!=0){
             notifyDataSetChanged();
         }
     }
 
-
+*/
 
     public class ChatViewHolder extends RecyclerView.ViewHolder{
 

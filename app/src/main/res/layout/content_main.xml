@@ -3,18 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_main"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.gerardo.chatrealmdemo.ui.MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <TextView
+        android:id="@+id/txt_rv_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="@string/message_recycler_empty"
+        android:textColor="@android:color/white"
+        android:textSize="16dp"
+        android:visibility="gone" />
+
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_channels"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_margin="15dp"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        android:layout_height="match_parent"/>
+        android:visibility="visible"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
 </LinearLayout>

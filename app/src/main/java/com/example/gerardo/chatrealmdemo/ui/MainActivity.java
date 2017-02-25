@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.gerardo.chatrealmdemo.Constants;
 import com.example.gerardo.chatrealmdemo.Funciones;
@@ -30,6 +31,8 @@ import com.example.gerardo.chatrealmdemo.model.Canal;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity implements ChannelAndUsernameDialog.IupdateRecyclers {
 
@@ -38,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements ChannelAndUsernam
     private Realm realm;
     @BindView(R.id.rv_channels)
     RecyclerView recyclerViewChannel;
+    @BindView(R.id.txt_rv_empty)
+    TextView txtRecyclerViewEmpty;
     ListaCanalAdapter adapter;
 
     @Override
@@ -68,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements ChannelAndUsernam
     }
 
     private void validarUsernameExist() {
-        SharedPreferences prefs = getSharedPreferences("prefs_chat_realm",MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences(Constants.PREFS_NAME,MODE_PRIVATE);
         if (prefs.getString("username","").equals("")){
             ChannelAndUsernameDialog dialog = new ChannelAndUsernameDialog(this, Constants.DIALOG_USERNAME,
                     MainActivity.this);
@@ -83,7 +88,9 @@ public class MainActivity extends AppCompatActivity implements ChannelAndUsernam
 //        lm.setReverseLayout(true);
         recyclerViewChannel.setLayoutManager(lm);
         recyclerViewChannel.setAdapter(adapter);
-        adapter.setCanales(Canal.getCanales(realm));
+        RealmResults<Canal> canales = Canal.getCanales(realm);
+        checkContentRecyclerView(canales);
+        adapter.setCanales(canales);
 
         adapter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -307,5 +314,16 @@ public class MainActivity extends AppCompatActivity implements ChannelAndUsernam
         });
     }
 
+    private void checkContentRecyclerView(RealmResults<Canal> canales){
+        if (canales != null){
+            if (canales.size() == 0){
+                recyclerViewChannel.setVisibility(View.GONE);
+                txtRecyclerViewEmpty.setVisibility(View.VISIBLE);
+            }else{
+                recyclerViewChannel.setVisibility(View.VISIBLE);
+                txtRecyclerViewEmpty.setVisibility(View.GONE);
+            }
+        }
+    }
 
 }

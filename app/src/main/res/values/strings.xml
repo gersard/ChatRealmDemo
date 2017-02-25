@@ -4,4 +4,6 @@
     <string name="action_edit_username">Editar username</string>
     <string name="hint_edit_username_dialog">Nombre de usuario</string>
     <string name="text_see_users_online">Usuarios online</string>
+    <string name="message_recycler_empty">No hay ningún canal disponible, pero puedes crearlo en el botón inferior a la derecha</string>
+    <string name="message_recycler_empty_chat">Bienvenidos a este canal, puedes ingresar tus mensajes en el cuadro de texto inferior</string>
 </resources>

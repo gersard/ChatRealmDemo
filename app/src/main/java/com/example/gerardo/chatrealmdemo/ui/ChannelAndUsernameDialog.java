@@ -68,7 +68,7 @@ public class ChannelAndUsernameDialog extends Dialog {
 
         if (dialogType == Constants.DIALOG_USERNAME){
             txtTitleUsername.setText("Nombre de usuario");
-            editUsername.setHint("Su de usuario");
+            editUsername.setHint("Usuario");
             if (!prefs.getString("username", "").equals("")) {
                 editUsername.setText(prefs.getString("username", ""));
                 editUsername.setSelection(editUsername.getText().length());
