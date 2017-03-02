@@ -16,6 +16,7 @@ import com.example.gerardo.chatrealmdemo.model.Mensaje;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.RealmList;
+import io.realm.RealmResults;
 
 /**
  * Created by Gerardo on 19/02/2017.
@@ -24,13 +25,13 @@ import io.realm.RealmList;
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder> {
 
     Context context;
-    RealmList<Mensaje> mensajes;
-    private int idUser;
+    RealmResults<Mensaje> mensajes;
+    private long idUser;
     private String lastDate;
     private boolean lastMessageWasMe;
     RecyclerView mRecyclerview;
 
-    public ChatAdapter(Context context, int idUser, RealmList<Mensaje> mensajeRealmList) {
+    public ChatAdapter(Context context, long idUser, RealmResults<Mensaje> mensajeRealmList) {
         this.context = context;
         this.idUser = idUser;
         lastDate = "";

@@ -23,8 +23,8 @@ public class Application extends android.app.Application {
     public static AtomicInteger usuarioId;
     public static AtomicInteger mensajeId;
 
-    public static final String AUTH_URL = "http://52.43.78.5:9080/auth";
-    public static final String REALM_URL = "http://52.43.78.5:9080/~/demochat";
+    public static final String AUTH_URL = "http://"+BuildConfig.SERVER_IP+":9080/auth";
+    public static final String REALM_URL = "http://"+BuildConfig.SERVER_IP+":9080/~/chat";
 
     @Override
     public void onCreate() {

@@ -1,6 +1,7 @@
 package com.example.gerardo.chatrealmdemo.model;
 
 import com.example.gerardo.chatrealmdemo.Application;
+import com.example.gerardo.chatrealmdemo.Funciones;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -24,7 +25,7 @@ public class Usuario extends RealmObject {
     }
 
     public void setIdUsuario() {
-        this.id = Application.usuarioId.incrementAndGet();;
+        this.id = (int) Funciones.crearIdLong();
     }
 
     public String getNombreUsuario() {

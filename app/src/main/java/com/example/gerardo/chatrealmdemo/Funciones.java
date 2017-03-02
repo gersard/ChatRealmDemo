@@ -23,25 +23,24 @@ import io.realm.RealmResults;
 public class Funciones {
 
 
-
-    public static void crearCanales(Realm realm){
-        RealmResults<Canal> canales = realm.where(Canal.class).findAll();
-
-        if (canales.size() == 0){
-            for (int i = 1; i <= 6 ; i++) {
-                final int finalI = i;
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        Canal canal = new Canal();
-                        canal.setIdCanal();
-                        canal.setNombreCanal("Canal "+ finalI);
-                        realm.copyToRealm(canal);
-                    }
-                });
-            }
-        }
-    }
+//    public static void crearCanales(Realm realm){
+//        RealmResults<Canal> canales = realm.where(Canal.class).findAll();
+//
+//        if (canales.size() == 0){
+//            for (int i = 1; i <= 6 ; i++) {
+//                final int finalI = i;
+//                realm.executeTransaction(new Realm.Transaction() {
+//                    @Override
+//                    public void execute(Realm realm) {
+//                        Canal canal = new Canal();
+//                        canal.setIdCanal();
+//                        canal.setNombreCanal("Canal "+ finalI);
+//                        realm.copyToRealm(canal);
+//                    }
+//                });
+//            }
+//        }
+//    }
 
     public static void crearCanal(Realm realm, String nombreCanal){
         Canal canal = new Canal();
@@ -66,6 +65,15 @@ public class Funciones {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         String date = sdf.format(rightNow.getTime());
         return date;
+    }
+
+    public static long crearIdLong() {
+        Calendar c = Calendar.getInstance();
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSS");
+        String stringID = df.format(c.getTime());
+
+        return Long.parseLong(stringID);
     }
 
 }

@@ -22,6 +22,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
+import io.realm.SyncCredentials;
+import io.realm.SyncUser;
 
 /**
  * Created by Gerardo on 19/02/2017.
@@ -99,8 +101,9 @@ public class ChannelAndUsernameDialog extends Dialog {
 
                     realm.copyToRealm(user);
 
-                    prefs.edit().putInt("id_username", Application.usuarioId.get()).apply();
+                    prefs.edit().putLong("id_username", user.getIdUsuario()).apply();
                     prefs.edit().putString("username", editUsername.getText().toString()).apply();
+
                 } else if (dialogType == Constants.DIALOG_CHANNEL){
                     Funciones.crearCanal(realm,editUsername.getText().toString());
                     mIupdateRecyclers = (IupdateRecyclers) activity;

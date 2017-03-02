@@ -1,6 +1,7 @@
 package com.example.gerardo.chatrealmdemo.model;
 
 import com.example.gerardo.chatrealmdemo.Application;
+import com.example.gerardo.chatrealmdemo.Funciones;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -16,7 +17,7 @@ import io.realm.annotations.PrimaryKey;
 public class Canal extends RealmObject {
 
     @PrimaryKey
-    private int id;
+    private long id;
     private RealmList<Usuario> usuarios;
     private RealmList<Mensaje> mensajes;
     private String nombreCanal;
@@ -24,12 +25,12 @@ public class Canal extends RealmObject {
     public Canal() {
     }
 
-    public int getIdCanal() {
+    public long getIdCanal() {
         return id;
     }
 
     public void setIdCanal() {
-        this.id = Application.canalId.incrementAndGet();
+        this.id = Funciones.crearIdLong();
     }
 
     public RealmList<Usuario> getUsuarios() {
@@ -62,12 +63,15 @@ public class Canal extends RealmObject {
         return realm.where(Canal.class).findAll();
     }
 
-    public static RealmList<Mensaje> getMensajesByCanal(Realm realm, int idCanal){
-        Canal mensajes = realm.where(Canal.class).equalTo("id",idCanal)
-//                .findAllSorted("fechaEnviado", Sort.ASCENDING)
-                .findFirst();
+    public static RealmResults<Mensaje> getMensajesByCanal(Realm realm, long idCanal){
+//        Canal canal = realm.where(Canal.class).equalTo("id",idCanal)
+////                .findAllSorted("fechaEnviado", Sort.ASCENDING)
+//                .findFirst();
 
-        return mensajes.getMensajes();
+        RealmResults<Mensaje> mensajes = realm.where(Mensaje.class).equalTo("idCanal",idCanal)
+                .findAll();
+
+        return mensajes;
     }
 
 }

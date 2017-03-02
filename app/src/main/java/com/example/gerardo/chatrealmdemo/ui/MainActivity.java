@@ -57,15 +57,16 @@ public class MainActivity extends AppCompatActivity implements ChannelAndUsernam
         dialog.setCancelable(false);
         dialog.show();
 
-        SyncUser.loginAsync(SyncCredentials.usernamePassword("assertsoft", "assertsoft", true), Application.AUTH_URL, new SyncUser.Callback() {
+        SyncUser.loginAsync(SyncCredentials.usernamePassword("user", "user", false), Application.AUTH_URL, new SyncUser.Callback() {
             @Override
             public void onSuccess(SyncUser user) {
                 UserManager.setActiveUser(user);
                 dialog.dismiss();
 
                 realm = Realm.getDefaultInstance();
-                Funciones.crearCanales(realm);
                 setRecyclerView(MainActivity.this);
+
+                validarUsernameExist();
             }
 
             @Override
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements ChannelAndUsernam
         });
 
 
-        validarUsernameExist();
+
 
     }
 
@@ -102,8 +103,7 @@ public class MainActivity extends AppCompatActivity implements ChannelAndUsernam
     private void setRecyclerView(Context context){
         adapter = new ListaCanalAdapter(context,realm);
         LinearLayoutManager lm = new LinearLayoutManager(context);
-        //PROPIEDAD PARA EL CHAT
-//        lm.setReverseLayout(true);
+
         recyclerViewChannel.setLayoutManager(lm);
         recyclerViewChannel.setAdapter(adapter);
         RealmResults<Canal> canales = Canal.getCanales(realm);
@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements ChannelAndUsernam
             public void onChange(RealmResults<Canal> element) {
                 adapter.setCanales(element);
                 recyclerViewChannel.setAdapter(adapter);
+                checkContentRecyclerView(element);
             }
         });
 

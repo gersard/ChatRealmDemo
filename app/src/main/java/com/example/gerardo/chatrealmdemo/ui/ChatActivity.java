@@ -26,6 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
@@ -39,7 +40,7 @@ public class ChatActivity extends AppCompatActivity {
     ImageButton btnSend;
 
     Realm realm;
-    int idCanal;
+    long idCanal;
     SharedPreferences prefs;
     ChatAdapter adapter;
 
@@ -52,16 +53,16 @@ public class ChatActivity extends AppCompatActivity {
         realm = Realm.getDefaultInstance();
         Bundle b = getIntent().getExtras();
         idCanal = 0;
-        if (b.getInt("id_canal") != 0){
-            idCanal = b.getInt("id_canal");
+        if (b.getLong("id_canal") != 0){
+            idCanal = b.getLong("id_canal");
         }
         prefs = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
         getSupportActionBar().setTitle("Canal "+idCanal);
-        setupRecyclerView(prefs.getInt("id_username",0),idCanal);
+        setupRecyclerView(prefs.getLong("id_username",0),idCanal);
 
     }
 
-    private void setupRecyclerView(int idUser, int idCanal){
+    private void setupRecyclerView(long idUser, long idCanal){
 
         LinearLayoutManager lm = new LinearLayoutManager(this);
         lm.setReverseLayout(false);
@@ -69,13 +70,22 @@ public class ChatActivity extends AppCompatActivity {
         recyclerViewChat.setEmptyView(findViewById(R.id.txt_empty_view_chat));
 
 
-        RealmList<Mensaje> messages = Canal.getMensajesByCanal(realm,idCanal);
+        RealmResults<Mensaje> messages = Canal.getMensajesByCanal(realm,idCanal);
         adapter = new ChatAdapter(this,idUser,messages);
         recyclerViewChat.setAdapter(adapter);
         if (messages != null && messages.size() != 0){
             recyclerViewChat.scrollToPosition(adapter.getItemCount()-1);
             scrollRecyclerViewWhenKeyboardAppears(recyclerViewChat);
         }
+
+        messages.addChangeListener(new RealmChangeListener<RealmResults<Mensaje>>() {
+            @Override
+            public void onChange(RealmResults<Mensaje> element) {
+                adapter.notifyItemInserted(adapter.getItemCount());
+                recyclerViewChat.scrollToPosition(adapter.getItemCount()-1);
+                updateAdapter();
+            }
+        });
 
     }
 
@@ -88,8 +98,9 @@ public class ChatActivity extends AppCompatActivity {
                     Mensaje mensaje = new Mensaje();
                     mensaje.setIdMensaje();
                     mensaje.setContenidoMensaje(editMessage.getText().toString());
-                    mensaje.setIdUsuario(prefs.getInt("id_username",0));
+                    mensaje.setIdUsuario(prefs.getLong("id_username",0));
                     mensaje.setFechaEnviado(Funciones.getCurrentHour());
+                    mensaje.setIdCanal(idCanal);
 
                     realm.copyToRealm(mensaje);
 
@@ -113,8 +124,8 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void updateAdapter(){
-        RealmList<Mensaje> messages = Canal.getMensajesByCanal(realm,idCanal);
-        adapter = new ChatAdapter(this,prefs.getInt("id_username",0),messages);
+        RealmResults<Mensaje> messages = Canal.getMensajesByCanal(realm,idCanal);
+        adapter = new ChatAdapter(this,prefs.getLong("id_username",0),messages);
         recyclerViewChat.setAdapter(adapter);
     }
 

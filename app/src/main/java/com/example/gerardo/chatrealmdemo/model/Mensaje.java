@@ -1,6 +1,7 @@
 package com.example.gerardo.chatrealmdemo.model;
 
 import com.example.gerardo.chatrealmdemo.Application;
+import com.example.gerardo.chatrealmdemo.Funciones;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,6 +23,7 @@ public class Mensaje extends RealmObject {
     private String contenidoMensaje;
     private String fechaEnviado;
     private int idUsuario;
+    private long idCanal;
 
     public Mensaje() {
     }
@@ -31,7 +33,7 @@ public class Mensaje extends RealmObject {
     }
 
     public void setIdMensaje() {
-        this.id = Application.mensajeId.incrementAndGet();;
+        this.id = (int) Funciones.crearIdLong();
     }
 
     public String getContenidoMensaje() {
@@ -54,7 +56,15 @@ public class Mensaje extends RealmObject {
         return idUsuario;
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setIdUsuario(long idUsuario) {
+        this.idUsuario = (int) idUsuario;
+    }
+
+    public long getIdCanal() {
+        return idCanal;
+    }
+
+    public void setIdCanal(long idCanal) {
+        this.idCanal = idCanal;
     }
 }

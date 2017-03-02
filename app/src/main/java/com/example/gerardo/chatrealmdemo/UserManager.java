@@ -12,7 +12,8 @@ public class UserManager {
 
 
     public static void setActiveUser(SyncUser user){
-        SyncConfiguration defaultConfig = new SyncConfiguration.Builder(user,Application.REALM_URL).build();
+        SyncConfiguration defaultConfig = new SyncConfiguration.Builder(user,Application.REALM_URL)
+                .build();
         Realm.setDefaultConfiguration(defaultConfig);
     }
 

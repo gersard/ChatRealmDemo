@@ -4,12 +4,14 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.gerardo.chatrealmdemo.BuildConfig;
 import com.example.gerardo.chatrealmdemo.R;
 import com.example.gerardo.chatrealmdemo.model.Canal;
 
@@ -36,7 +38,7 @@ public class ListaCanalAdapter extends RecyclerView.Adapter<ListaCanalAdapter.Ca
     private List<Canal> channelPendingRemoval;
     boolean undoOn;
     private Handler handler = new Handler();
-    HashMap<Canal, Runnable> pendingRunnables = new HashMap<>();
+    HashMap<Canal, Runnable> pendingRunnables;
     private Realm realm;
 
     //listener para el evento onclick
@@ -47,6 +49,7 @@ public class ListaCanalAdapter extends RecyclerView.Adapter<ListaCanalAdapter.Ca
         channelPendingRemoval = new ArrayList<>();
         undoOn = true;
         this.realm = realm;
+        pendingRunnables = new HashMap<>();
     }
 
 
@@ -91,12 +94,15 @@ public class ListaCanalAdapter extends RecyclerView.Adapter<ListaCanalAdapter.Ca
 
     @Override
     public int getItemCount() {
+        if (canales == null){
+            return 0;
+        }
         return canales.size();
     }
 
     public void setCanales(RealmResults<Canal> canalesList){
         canales = canalesList;
-        notifyDataSetChanged();
+        notifyItemRangeInserted(getItemCount()-1,canalesList.size());
     }
 
     public void setOnClickListener(View.OnClickListener listener){
@@ -109,7 +115,8 @@ public class ListaCanalAdapter extends RecyclerView.Adapter<ListaCanalAdapter.Ca
         }
     }
 
-    public int getCanalId(int pos){
+    public long getCanalId(int pos){
+        Log.d("AIDI",canales.get(pos).getIdCanal()+"");
         return canales.get(pos).getIdCanal();
     }
 
@@ -141,6 +148,7 @@ public class ListaCanalAdapter extends RecyclerView.Adapter<ListaCanalAdapter.Ca
             };
             handler.postDelayed(pendingRemovalRunnable, PENDING_REMOVAL_TIMEOUT);
             pendingRunnables.put(item, pendingRemovalRunnable);
+
         }
     }
 
