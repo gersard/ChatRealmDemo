@@ -1,5 +1,6 @@
 package com.example.gerardo.chatrealmdemo.ui;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,19 +23,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.example.gerardo.chatrealmdemo.Constants;
-import com.example.gerardo.chatrealmdemo.Funciones;
-import com.example.gerardo.chatrealmdemo.R;
+import android.widget.Toast;
+import com.example.gerardo.chatrealmdemo.*;
 import com.example.gerardo.chatrealmdemo.adapter.ListaCanalAdapter;
 import com.example.gerardo.chatrealmdemo.model.Canal;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
+import io.realm.*;
 
-public class MainActivity extends AppCompatActivity implements ChannelAndUsernameDialog.IupdateRecyclers {
+public class MainActivity extends AppCompatActivity implements ChannelAndUsernameDialog.IupdateRecyclers, SyncUser.Callback {
 
     private final String TAG = getClass().getSimpleName();
 
@@ -53,6 +51,30 @@ public class MainActivity extends AppCompatActivity implements ChannelAndUsernam
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
 
+
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Cargando...");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        SyncUser.loginAsync(SyncCredentials.usernamePassword("assertsoft", "assertsoft", true), Application.AUTH_URL, new SyncUser.Callback() {
+            @Override
+            public void onSuccess(SyncUser user) {
+                UserManager.setActiveUser(user);
+                dialog.dismiss();
+
+                realm = Realm.getDefaultInstance();
+                Funciones.crearCanales(realm);
+                setRecyclerView(MainActivity.this);
+            }
+
+            @Override
+            public void onError(ObjectServerError error) {
+                dialog.dismiss();
+                Toast.makeText(MainActivity.this,error.getErrorMessage(),Toast.LENGTH_LONG).show();
+            }
+        });
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,10 +85,6 @@ public class MainActivity extends AppCompatActivity implements ChannelAndUsernam
             }
         });
 
-        realm = Realm.getDefaultInstance();
-
-        Funciones.crearCanales(realm);
-        setRecyclerView(this);
 
         validarUsernameExist();
 
@@ -102,6 +120,15 @@ public class MainActivity extends AppCompatActivity implements ChannelAndUsernam
         });
         setUpItemTouchHelper();
         setUpAnimationDecoratorHelper();
+
+        canales.addChangeListener(new RealmChangeListener<RealmResults<Canal>>() {
+            @Override
+            public void onChange(RealmResults<Canal> element) {
+                adapter.setCanales(element);
+                recyclerViewChannel.setAdapter(adapter);
+            }
+        });
+
     }
 
     @Override
@@ -326,4 +353,14 @@ public class MainActivity extends AppCompatActivity implements ChannelAndUsernam
         }
     }
 
+    //CALLBACK'S REALM SYNC USER
+    @Override
+    public void onSuccess(SyncUser user) {
+
+    }
+
+    @Override
+    public void onError(ObjectServerError error) {
+
+    }
 }

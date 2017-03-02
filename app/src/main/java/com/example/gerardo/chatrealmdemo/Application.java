@@ -10,6 +10,8 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
+import io.realm.log.LogLevel;
+import io.realm.log.RealmLog;
 
 /**
  * Created by Gerardo on 18/02/2017.
@@ -21,15 +23,20 @@ public class Application extends android.app.Application {
     public static AtomicInteger usuarioId;
     public static AtomicInteger mensajeId;
 
+    public static final String AUTH_URL = "http://52.43.78.5:9080/auth";
+    public static final String REALM_URL = "http://52.43.78.5:9080/~/demochat";
+
     @Override
     public void onCreate() {
         super.onCreate();
         Realm.init(this);
-        RealmConfiguration realmConfig = new RealmConfiguration.Builder()
-                .schemaVersion(0)
+        //RealmConfiguration realmConfig = new RealmConfiguration.Builder()
+          //      .schemaVersion(0)
 //                .deleteRealmIfMigrationNeeded()
-                .build();
-        Realm.setDefaultConfiguration(realmConfig);
+            //    .build();
+        //Realm.setDefaultConfiguration(realmConfig);
+
+        RealmLog.setLevel(LogLevel.ALL);
 
         Realm realm = Realm.getDefaultInstance();
         canalId = getIdByTable(realm, Canal.class);
